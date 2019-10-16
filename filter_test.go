@@ -1,15 +1,26 @@
 package collection
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
+func TestCollection_ArraySizeZeroFilter(t *testing.T) {
+	array := []int{}
+	expect := []int{}
+	result, err := Stream(array).Filter(func(i int) bool {
+		return i >= 3 && i <= 6
+	}).Result()
+	resultArray := result.([]int)
+	assert.Nil(t, err)
+	assert.EqualValues(t, len(resultArray), 0)
+	assert.Equal(t, expect, result)
+}
+
 func TestCollection_NumberFilter(t *testing.T) {
 	array := []int{9, 8, 7, 6, 5, 4, 3, 2, 1}
 	expect := []int{6, 5, 4, 3}
-	result, err := New(array).Filter(func(i int) bool {
+	result, err := Stream(array).Filter(func(i int) bool {
 		return i >= 3 && i <= 6
 	}).Result()
 	resultArray := result.([]int)
@@ -37,7 +48,7 @@ func TestCollection_Filter(t *testing.T) {
 		{Id: 3, Name: "test-3", Status: true},
 		{Id: 5, Name: "test-5", Status: true},
 	}
-	result, err := New(array).Filter(func(user User) bool {
+	result, err := Stream(array).Filter(func(user User) bool {
 		return user.Status == true
 	}).Result()
 	userArray := result.([]User)
@@ -65,8 +76,7 @@ func TestCollection_PointerFilter(t *testing.T) {
 		{Id: 3, Name: "test-3", Status: true},
 		{Id: 5, Name: "test-5", Status: true},
 	}
-	result, err := New(array).Filter(func(user *User) bool {
-		fmt.Println(user)
+	result, err := Stream(array).Filter(func(user *User) bool {
 		return user.Status == true
 	}).Result()
 	userArray := result.([]*User)

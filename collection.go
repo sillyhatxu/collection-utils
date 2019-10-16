@@ -1,14 +1,14 @@
 package collection
 
 type collection struct {
-	slice interface{}
+	input interface{}
 	err   error
 }
 
-func New(slice interface{}) *collection {
-	return &collection{slice: slice}
+func Stream(input interface{}) *collection {
+	return &collection{input: input}
 }
 
 func (c *collection) Result() (interface{}, error) {
-	return c.slice, c.err
+	return c.input, c.err
 }

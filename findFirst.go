@@ -1,13 +1,9 @@
 package collection
 
-import (
-	"reflect"
-)
-
 /**
 f interface{} = func(v <T>) bool{}
 */
-func (c *collection) Filter(f interface{}) *collection {
+func (c *collection) FindFirst(f interface{}) *collection {
 	if c == nil {
 		return &collection{err: CollectionNilError}
 	}
@@ -18,22 +14,18 @@ func (c *collection) Filter(f interface{}) *collection {
 	if err != nil {
 		return &collection{err: err}
 	}
-	funcValue, funcType, err := c.validateFilterFunc(f)
+	funcValue, _, err := c.validateFilterFunc(f)
 	if err != nil {
 		return &collection{err: err}
 	}
-	resultSliceType := reflect.SliceOf(funcType.In(0))
-	ret := reflect.MakeSlice(resultSliceType, 0, sv.Len())
 	if sv.Len() == 0 {
-		return &collection{input: ret.Interface()}
+		return &collection{input: nil}
 	}
 	for i := 0; i < sv.Len(); i++ {
 		v := sv.Index(i)
 		if executeFilterFunc(funcValue, v) {
-			ret = reflect.Append(ret, v)
+			return &collection{input: v.Interface()}
 		}
 	}
-	return &collection{
-		input: ret.Interface(),
-	}
+	return &collection{input: nil}
 }
