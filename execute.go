@@ -5,7 +5,15 @@ import (
 	"sort"
 )
 
+func executeSumFunc(fv, v reflect.Value) int64 {
+	return fv.Call([]reflect.Value{v})[0].Interface().(int64)
+}
+
 func executeFilterFunc(fv, v reflect.Value) bool {
+	return fv.Call([]reflect.Value{v})[0].Interface().(bool)
+}
+
+func executeFindFirstFunc(fv, v reflect.Value) bool {
 	return fv.Call([]reflect.Value{v})[0].Interface().(bool)
 }
 

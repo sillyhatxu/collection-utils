@@ -14,7 +14,7 @@ func (c *collection) Filter(f interface{}) *collection {
 	if c.err != nil {
 		return &collection{err: c.err}
 	}
-	sv, err := c.validateFilterInputSlice()
+	sv, err := c.validateSumInputSlice()
 	if err != nil {
 		return &collection{err: err}
 	}

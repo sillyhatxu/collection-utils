@@ -55,6 +55,12 @@ func TestCollection_Filter(t *testing.T) {
 	assert.Nil(t, err)
 	assert.EqualValues(t, len(userArray), 3)
 	assert.Equal(t, expect, result)
+
+	count, err := Stream(array).Filter(func(user User) bool {
+		return user.Status == true
+	}).Count()
+	assert.Nil(t, err)
+	assert.EqualValues(t, count, 3)
 }
 
 func TestCollection_PointerFilter(t *testing.T) {

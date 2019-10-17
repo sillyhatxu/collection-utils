@@ -1,9 +1,9 @@
 package collection
 
 /**
-f interface{} = func(v <T>) bool{}
+f interface{} = func(v <T>) int64
 */
-func (c *collection) FindFirst(f interface{}) *collection {
+func (c *collection) sum(f interface{}) *collection {
 	if c == nil {
 		return &collection{err: CollectionNilError}
 	}
@@ -14,18 +14,17 @@ func (c *collection) FindFirst(f interface{}) *collection {
 	if err != nil {
 		return &collection{err: err}
 	}
-	funcValue, _, err := c.validateFindFirstFunc(f)
+	funcValue, _, err := c.validateSumFunc(f)
 	if err != nil {
 		return &collection{err: err}
 	}
+	var total int64 = 0
 	if sv.Len() == 0 {
-		return &collection{input: nil}
+		return &collection{input: total}
 	}
 	for i := 0; i < sv.Len(); i++ {
 		v := sv.Index(i)
-		if executeFindFirstFunc(funcValue, v) {
-			return &collection{input: v.Interface()}
-		}
+		total += executeSumFunc(funcValue, v)
 	}
-	return &collection{input: nil}
+	return &collection{input: total}
 }
